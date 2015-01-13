@@ -1,0 +1,261 @@
+/*
+* Export versionized Terrific Micro packages.
+*
+* grunt tc-micro-export
+* grunt tc-micro-export:dump
+* grunt tc-micro-export:release
+* grunt tc-micro-export:release:minor
+* grunt tc-micro-export:release:major
+*
+* @author Christian Stuff <christian.stuff@namics.com>
+*/
+'use strict';
+
+module.exports = function(grunt) {
+    var DESC = 'Export versionized Terrific Micro packages.';
+
+    grunt.registerMultiTask('tc-micro-exporter', DESC, function(type, incType) {
+
+        var pkg = grunt.file.readJSON('package.json'),
+            exporter = this.data,
+            tcConfig = grunt.file.readJSON('config.json'),
+            tmpDirectory = exporter.tmpDirectory;
+
+        switch(type) {
+            case 'release':
+                switch(version) {
+                    case 'major':
+                        grunt.task.run(['bump-only:major']);
+                        break;
+                    case 'minor':
+                        grunt.task.run(['bump-only:minor']);
+                        break;
+                    default:
+                        grunt.task.run(['bump-only']);
+                        break;
+                }
+                grunt.task.run(['tc-micro-export:dump', 'bump-commit']);
+                break;
+            case 'dump':
+            default:
+                grunt.task.run([
+                    setupDirectories,
+                    getMicroViews,
+                    getMicroAssets,
+                    copyAdditionalFiles,
+                    'imagemin',
+                    fetchVersion,
+                    replaceInFiles,
+                    mapFiles,
+                    dumpFiles
+                ]);
+                break;
+        }
+
+        /**
+        * Sets up tmpDirectory and dumpDirectory
+        */
+        function setupDirectories() {
+            if(grunt.file.exists(tmpDirectory)) {
+                grunt.file.delete(tmpDirectory, {
+                    force: true
+                });
+            }
+            grunt.file.mkdir(tmpDirectory);
+            grunt.file.mkdir(exporter.dumpDirectory);
+        }
+
+        /**
+        * Loads the list of views
+        */
+        function getMicroViews() {
+            var views = [];
+
+            if(exporter.exportViews) {
+                if('object' !== typeof(tcConfig) && 'object' !== typeof(tcConfig.micro)) {
+                    grunt.task.run([cleanup]);
+                    grunt.fail.fatal('No correct terrific configuration found. Please check config.json to be correct.');
+                }
+
+                grunt.file.recurse(tcConfig.micro.view_directory, function(abspath, rootdir, subdir, filename) {
+                    var file = filename.replace('.' + tcConfig.micro.view_file_extension, ''),
+                        partialsDir = tcConfig.micro.view_partials_directory;
+
+                    if(abspath.search(partialsDir) === 0) {
+                        return;
+                    }
+                    if(subdir) {
+                        file = subdir.replace(/\//g, '-') + '-' + file;
+                    }
+                    if(exporter.exportViews === true || (typeof exporter.exportViews === "object" && exporter.exportViews.length && exporter.exportViews.indexOf(file) !== -1)) {
+                        grunt.task.run('exec:configViews:' + file);
+                        views.push(file);
+                    }
+                });
+            }
+        }
+
+        /**
+        * Loads the Micro asset filenames from the config.json
+        */
+        function getMicroAssets() {
+            var dev = grunt.option('dev'),
+                assets = [], asset;
+
+            if(exporter.exportAssets) {
+                if('object' !== typeof(tcConfig) && 'object' !== typeof(tcConfig.assets)) {
+                    grunt.task.run([cleanup]);
+                    grunt.fail.fatal('No correct terrific configuration found. Please check config.json to be correct.');
+                }
+
+                for(asset in tcConfig.assets) {
+                    if(tcConfig.assets.hasOwnProperty(asset)) {
+                        if(exporter.exportAssets === true || (typeof exporter.exportAssets === "object" && exporter.exportAssets.length && exporter.exportAssets.indexOf(asset) !== -1)) {
+                            grunt.task.run('exec:configAssets:' + asset);
+                            assets.push(asset);
+                        }
+                    }
+                }
+            }
+        }
+
+        /**
+        * Copies the additional files to the to-be-zipped folder
+        */
+        function copyAdditionalFiles() {
+            var globs = exporter.additionalFiles;
+
+            globs.forEach(function(glob) {
+                var files = grunt.file.expand(glob);
+
+                files.forEach(function(file) {
+                    if(grunt.file.isDir(file)) {
+                        grunt.file.mkdir(fixPath(tmpDirectory) + file);
+                    }
+                    if(grunt.file.isFile(file)) {
+                        grunt.file.copy(file, fixPath(tmpDirectory) + file);
+                    }
+                });
+            });
+        }
+
+        /**
+        * Replace strings in configured files
+        */
+        function replaceInFiles() {
+            var dir = tmpDirectory;
+
+            exporter.replacements.forEach(function(entry) {
+                var files = grunt.file.expand({cwd:dir},entry.files);
+
+                files.forEach(function(file) {
+                    var filePath = fixPath(dir) + file,
+                    fileContent = grunt.file.read(filePath);
+
+                    entry.replace.forEach(function(replace) {
+                        fileContent = fileContent.replace(new RegExp(replace.from, "g"), replace.to);
+                    });
+                    grunt.file.write(filePath, fileContent);
+                });
+            });
+        }
+
+        /**
+        * Applies the configured file mapping
+        */
+        function mapFiles() {
+            var src, dest, files;
+
+            for(src in exporter.mapping) {
+                if(exporter.mapping.hasOwnProperty(src)) {
+                    dest = fixPath(tmpDirectory) + exporter.mapping[src];
+                    src = fixPath(tmpDirectory) + src;
+
+                    grunt.file.expand(src).forEach(function(srcFile) {
+                        var match = srcFile.match(src.replace(/\*/g, "(.*)")),
+                            matchData = {},
+                            matchDest;
+
+                        if(match && match.length) {
+                            for(var i = 1; i < match.length; i++) {
+                                matchData['$'+i] = match[i];
+                            }
+                            matchDest = grunt.template.process(dest, { data: matchData });
+                        } else {
+                            matchDest = dest;
+                        }
+
+                        if(grunt.file.isDir(srcFile)) {
+                            files = grunt.file.expand(fixPath(srcFile) + '**');
+                            files.forEach(function(file) {
+                                if (grunt.file.isFile(file)) {
+                                    grunt.file.copy(file, matchDest + file.replace(srcFile, ''));
+                                }
+                            });
+                            grunt.file.delete(srcFile, {
+                                force: true
+                            });
+                        }
+
+                        if(grunt.file.isFile(srcFile)) {
+                            grunt.file.copy(srcFile, matchDest);
+                            grunt.file.delete(srcFile, {
+                                force: true
+                            });
+                        }
+                    });
+                }
+            }
+        }
+
+        /**
+        * Handles the file dumping by configured dumpType
+        */
+        function dumpFiles() {
+            switch(exporter.dumpType) {
+                case 'folder':
+                    var dest = fixPath(exporter.dumpDirectory) + grunt.template.process(exporter.dumpName, { data: pkg }) + '/';
+
+                    grunt.file.mkdir(dest);
+                    grunt.file.recurse(tmpDirectory, function(abspath, rootdir, subdir, filename) {
+                        if(subdir && !grunt.file.exists(fixPath(dest) + fixPath(subdir))) {
+                            grunt.file.mkdir(fixPath(dest) + fixPath(subdir));
+                        }
+                        grunt.file.copy(abspath, fixPath(dest) + (subdir ? fixPath(subdir) : '') + filename);
+                    });
+                    grunt.task.run([cleanup]);
+                    break;
+                case 'zip':
+                default:
+                    grunt.task.run(['zip']);
+                    grunt.task.run([cleanup]);
+                    break;
+            }
+        }
+
+        /**
+        * Removes the tmpDirectory
+        */
+        function cleanup() {
+            grunt.file.delete(tmpDirectory);
+        }
+
+        /**
+        * Gets the current version from package.json.
+        */
+        function fetchVersion() {
+            pkg = grunt.file.readJSON('package.json');
+            grunt.config.set('pkg', pkg);
+        }
+
+        /**
+        * Helper method to add trailing slash to folder names.
+        */
+        function fixPath(folder) {
+            if(folder.substr(-1) !== '/') {
+                folder += '/';
+            }
+            return folder;
+        }
+    });
+};

@@ -1,0 +1,33 @@
+{
+	"name": "grunt-terrific-micro-exporter",
+	"version": "0.0.0",
+	"description": "An easy-to-use export module for Terrific Micro based on Grunt.js",
+	"author": "Christian Stuff <christian.stuff@namics.com>",
+	"contributors": [{
+		"name": "Ernst Ammann",
+		"email": "ernst.ammann@namics.com"
+	}],
+	"repository": {
+		"type": "git",
+		"url": "https://git.namics.com/namics/micro-grunt-exporter"
+	},
+	"bugs": {
+	  "url": "https://git.namics.com/namics/micro-grunt-exporter/issues"
+	},
+	"keywords": [
+		"terrific",
+		"micro",
+		"exporter",
+		"grunt"
+	],
+	"dependencies": {
+		"grunt-cli": ">=0.1.13",
+		"grunt-bump": ">=0.0.15",
+		"grunt-contrib-imagemin": ">=0.8.1",
+		"grunt-exec": ">=0.4.6",
+		"grunt-zip": ">=0.16.0",
+		"touch": ">=0.0.3",
+		"runonymous-grunt": ">=0.0.1"
+	},
+	"license": "MIT"
+}
