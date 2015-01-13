@@ -12,34 +12,114 @@ This tool exports your views and assets into a versioned zip file. It fetches th
 
 ## Installation
 
-You need to have [NPM](https://www.npmjs.org) installed.
-Add the files `Gruntfile.js` and `package.json` from this repository to the root of your [Terrific Micro](http://namics.github.io/terrific-micro/) project.
+This plugin requires Grunt.
 
-Run `npm install` (or `sudo npm install` if necessary) from the command line to install the dependencies.
+If you haven't used [Grunt](http://gruntjs.com) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
+
+	npm install grunt-terrific-micro-exporter
+
+Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
+
+	grunt.loadNpmTasks('grunt-terrific-micro-exporter');
 
 ## Configuration
 
-Per default the `package.json` file contains the package name `terrific-micro-exporter` and the version `0.0.0`. You can change the name and version to your needs. Keep in mind that the version is bumped with every release you'll trigger.
+In your project's Gruntfile, add a section named `'tc-micro-exporter'` to the data object passed into `grunt.initConfig()`. The options are:
 
-The exporter configuration is set within `package.json` and its exporter node.
+	grunt.initConfig({
+		'tc-micro-exporter': {
+			config: {
+				dumpDirectory: 'export',
+				dumpType: 'zip',
+				dumpName: '<%= name %>-<%= version %>',
+				tmpDirectory: 'app/cache/grunt-terrific-micro-exporter-dl',
+				exportAssets: true,
+				exportViews: true,
+				additionalFiles: [],
+				imageminPaths: [],
+				mapping: {},
+				replacements: [],
+				bump: {
+					commit: true,
+					files: ['package.json'],
+					push: true,
+					pushTo: 'origin',
+					tag: true
+				}
+			}
+		}
+	});
 
-* `dumpDirectory`: the folder name, where the dumped files will be saved.
-* `dumpType`: can be "zip" or "folder"
-* `dumpName`: the name of the dumped zip/folder. Default: `"<%= name %>-<%= version %>"`
-* `exportAssets`: can be `true` or an array containing the desired assets, e.g. `["app.css", "app.js"]`
-* `exportViews`: can be `true` or an array containing the desired view names, e.g. `["index", "content"]`
-* `additionalFiles`: An array containing glob patterns for additional files, that should be added to the zip files.
-* `imageminPaths`: Your default paths to images, that shall be optimized by imagemin.
-* `mapping`: You can define mappings for files and folders to restructure the folders inside the zip file. Mappings are processed one by another. You can access single globbed placeholders (`*`) and use them inside the destination path via grunt templates. For example: `"/path/to/*/index.html": "/dest/<%= $1 %>/index.html"` will be executed for each matched file.
-* `replacements`: An array containing replace-objects (see below). You can configure different replacements for different file sets.
-	* `replacements[].files`: An array containing glob patterns, where you want string replacements to get set.
-	* `replacements[].replace`: An array containing objects with "from" and "to" properties. Every occurance of the string behind "from" will be replaced with the string behind "to".
-* `bump`: Specific configuration keys for [grunt-bump](https://github.com/vojtajina/grunt-bump)
-	* `bump.commit`: Whether the new version shall be comitted (true) or not (false)
-	* `bump.files`: Array containing the version files, that shall be comitted
-	* `bump.push`: Whether the new version commit shall be pushed (true) or not (false)
-	* `bump.pushTo`: The remote repository ref, e.g. 'origin'
-	* `bump.tag`: Whether a new version tag shall be created (true) or not (false)
+## Options
+
+### config.dumpDirectory
+
+Type: `String` Default value: `'export'`
+The folder name, where the dumped files will be saved.
+
+### config.dumpType
+
+Type: `String` Default value: `'zip'`
+The type of dump. Can be `'zip'` or `'folder'`.
+
+### config.dumpName
+
+Type: `String` Default value: `'<%= name %>-<%= version %>'`
+The name of the dumped zip/folder.
+
+### config.tmpDirectory
+
+Type: `String` Default value: `'app/cache/grunt-terrific-micro-export-dl'`
+The path to the temporary download folder. This will be deleted after task execution.
+
+### config.exportAssets
+
+Type: `Boolean`|`Array` Default value: `true`
+Defines if you want to export Terrific Micros assets (defined at `config.json`).
+Use an array of strings, to export only selected assets.
+
+### config.exportViews
+
+Type: `Boolean`|`Array` Default value: `true`
+Defines if you want to export Terrific Micros views.
+Use an array of strings, to export only selected views.
+
+### config.additionalFiles
+
+Type: `Array`
+An array containing glob patterns for additional files, that should be added to the dumped files.
+
+### config.imageminPaths
+
+Type: `Array`
+Your default paths to images, that shall be optimized by imagemin.
+
+### config.mapping
+
+Type: `Object`
+You can define mappings for files and folders to restructure the folders inside the dump. Mappings are processed one by another. You can access single globbed placeholders (`*`) and use them inside the destination path via grunt templates. For example: `"/path/to/*/index.html": "/dest/<%= $1 %>/index.html"` will be executed for each matched file.
+
+### config.replacements
+
+Type: `Array`
+An array containing replace definition objects for Regex and String replacements inside the specified files.
+
+For example:
+
+	replacements: [{
+		files: ["*.html", "app.css"],
+		replace: [{
+			from: "foo",
+			to: "bar"
+		}]
+	}]
+
+Will search inside every `.html` file and the `app.css` file for `"foo"` and replaces all its occurences with `"bar"`.
+
+### config.bump
+
+Type: `Object`
+Here you can define the keys `commit`, `files`, `push`, `pushTo` and `tag` for [grunt-bump](https://github.com/vojtajina/grunt-bump).
 
 ## Usage
 
@@ -69,7 +149,7 @@ Here are some examples for your every day usage:
 
 Use one of these and you will find a dump with the new version in your configured `dumpDirectory`. Per default a release commit and tag is pushed to your project repository (unless you're not using git). You can for sure change this behaviour by tweaking the grunt-bump configuration inside `Gruntfile.js`.
 
-When using `grunt micro:dump` you should change the version to prevent file overwriting (manually or by running `grunt bump-only` or `grunt-bump-only:prerelease`).
+When using `grunt tc-micro-exporter:dump` you should change the version to prevent file overwriting (manually or by running `grunt bump-only` or `grunt-bump-only:prerelease`).
 
 ## Contributing
 
@@ -78,7 +158,7 @@ When using `grunt micro:dump` you should change the version to prevent file over
 
 ## Credits
 
-Terrific Micro Grunt Exporter was created by [Christian Stuff](https://github.com/Regaddi)
+Grunt Terrific Micro Exporter was created by [Christian Stuff](https://github.com/Regaddi)
 
 ## License
 
