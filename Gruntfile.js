@@ -1,6 +1,5 @@
 module.exports = function(grunt) {
-	require('runonymous-grunt')(grunt);
-
+	
 	var touch = require("touch"),
 		pkg = grunt.file.readJSON('package.json'),
 		exporter = grunt.config.get('tc-micro-exporter').config,

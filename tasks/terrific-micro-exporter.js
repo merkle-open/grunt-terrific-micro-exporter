@@ -11,7 +11,11 @@
 */
 'use strict';
 
+
 module.exports = function(grunt) {
+
+    require('runonymous-grunt')(grunt);
+
     var DESC = 'Export versionized Terrific Micro packages.';
 
     grunt.registerMultiTask('tc-micro-exporter', DESC, function(type, incType) {
