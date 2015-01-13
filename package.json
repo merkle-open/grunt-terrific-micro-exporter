@@ -20,7 +20,7 @@
 		"exporter",
 		"grunt"
 	],
-	"dependencies": {
+	"devDependencies": {
 		"grunt-cli": ">=0.1.13",
 		"grunt-bump": ">=0.0.15",
 		"grunt-contrib-imagemin": ">=0.8.1",
