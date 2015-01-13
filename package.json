@@ -9,7 +9,7 @@
 	}],
 	"repository": {
 		"type": "git",
-		"url": "https://git.namics.com/namics/micro-grunt-exporter"
+		"url": "https://github.com/namics/grunt-terrific-micro-exporter"
 	},
 	"bugs": {
 	  "url": "https://git.namics.com/namics/micro-grunt-exporter/issues"
