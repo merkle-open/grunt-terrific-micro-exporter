@@ -158,9 +158,9 @@ Here are some examples for your every day usage:
 	# Don't minify CSS and JS for minor release
 	grunt tc-micro-exporter:release:minor --dev
 
-Use one of these and you will find a dump with the new version in your configured `dumpDirectory`. Per default a release commit and tag is pushed to your project repository (unless you're not using git). You can for sure change this behaviour by tweaking the grunt-bump configuration inside `Gruntfile.js`.
+Use one of these and you will find a dump with the new version in your configured `dumpDirectory`. Per default a release commit and tag is pushed to your project repository (unless you're not using git).
 
-When using `grunt tc-micro-exporter:dump` you should change the version to prevent file overwriting (manually or by running `grunt bump-only` or `grunt-bump-only:prerelease`).
+When using `grunt tc-micro-exporter:dump` you should change the version to prevent file overwriting (manually or by running `grunt bump-only` or `grunt bump-only:prerelease`).
 
 ## Contributing
 

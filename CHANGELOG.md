@@ -1,3 +1,3 @@
 # Changelog - Terrific Micro Exporter
 
-## v1.0.0 - 2015-01-13  - first version
+## v0.0.6 - 2015-01-13  - first version
