@@ -1,6 +1,6 @@
 {
 	"name": "grunt-terrific-micro-exporter",
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"description": "An easy-to-use export module for Terrific Micro based on Grunt.js",
 	"author": "Christian Stuff <christian.stuff@namics.com>",
 	"contributors": [{
@@ -12,7 +12,7 @@
 		"url": "https://github.com/namics/grunt-terrific-micro-exporter"
 	},
 	"bugs": {
-	  "url": "https://git.namics.com/namics/micro-grunt-exporter/issues"
+	  "url": "https://github.com/namics/grunt-terrific-micro-exporter/issues"
 	},
 	"keywords": [
 		"terrific",
