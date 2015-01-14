@@ -52,63 +52,63 @@ You will also need a `package.json` file at the root of your project to hold you
 
 ## Options
 
-### config.dumpDirectory
+### dumpDirectory
 
 Type: `String` Default value: `'export'`
 
 The folder name, where the dumped files will be saved.
 
-### config.dumpType
+### dumpType
 
 Type: `String` Default value: `'zip'`
 
 The type of dump. Can be `'zip'` or `'folder'`.
 
-### config.dumpName
+### dumpName
 
 Type: `String` Default value: `'{%= name %}-{%= version %}'`
 
 The name of the dumped zip/folder. Use the custom delimiters to make sure, that your dumps get the correct new version.
 
-### config.tmpDirectory
+### tmpDirectory
 
 Type: `String` Default value: `'app/cache/grunt-terrific-micro-export-dl'`
 
 The path to the temporary download folder. This will be deleted after task execution.
 
-### config.exportAssets
+### exportAssets
 
 Type: `Boolean`|`Array` Default value: `true`
 
 Defines if you want to export Terrific Micros assets (defined at `config.json`).
 Use an array of strings, to export only selected assets.
 
-### config.exportViews
+### exportViews
 
 Type: `Boolean`|`Array` Default value: `true`
 
 Defines if you want to export Terrific Micros views.
 Use an array of strings, to export only selected views.
 
-### config.additionalFiles
+### additionalFiles
 
 Type: `Array`
 
 An array containing glob patterns for additional files, that should be added to the dumped files.
 
-### config.imageminPaths
+### imageminPaths
 
 Type: `Array`
 
 Your default paths to images, that shall be optimized by imagemin.
 
-### config.mapping
+### mapping
 
 Type: `Object`
 
 You can define mappings for files and folders to restructure the folders inside the dump. Mappings are processed one by another. You can access single globbed placeholders (`*`) and use them inside the destination path via grunt templates. For example: `"/path/to/*/index.html": "/dest/{%= $1 %}/index.html"` will be executed for each matched file.
 
-### config.replacements
+### replacements
 
 Type: `Array`
 
@@ -126,7 +126,7 @@ For example:
 
 Will search inside every `.html` file and the `app.css` file for `"foo"` and replaces all its occurences with `"bar"`.
 
-### config.bump
+### bump
 
 Type: `Object`
 
