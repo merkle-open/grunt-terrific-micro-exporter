@@ -1,7 +1,8 @@
 # Changelog - Terrific Micro Exporter
 
-## v0.0.9 - 2015-01-14
+## v0.0.10 - 2015-01-14
 
+- imageminPaths now supports glob patterns
 - fixed mapping: now uses custom delimiters `{%` and `%}`
 - removed `config` key from configuration to slim down the configuration
 - `dumpName` now uses custom delimiters `{%` and `%}` to prevent template processing with old package information

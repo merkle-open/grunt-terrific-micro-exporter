@@ -100,7 +100,7 @@ An array containing glob patterns for additional files, that should be added to 
 
 Type: `Array`
 
-Your default paths to images, that shall be optimized by imagemin.
+Your default paths to images, that shall be optimized by imagemin. You can use glob patterns for wildcard directory selection.
 
 ### mapping
 
