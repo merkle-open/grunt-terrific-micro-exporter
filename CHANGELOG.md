@@ -1,7 +1,8 @@
 # Changelog - Terrific Micro Exporter
 
-## v0.0.7 - 2015-01-14
+## v0.0.9 - 2015-01-14
 
+- fixed mapping: now uses custom delimiters `{%` and `%}`
 - removed `config` key from configuration to slim down the configuration
 - `dumpName` now uses custom delimiters `{%` and `%}` to prevent template processing with old package information
 - `tc-micro-exporter` is not longer a multiTask

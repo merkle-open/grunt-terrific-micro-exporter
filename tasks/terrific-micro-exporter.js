@@ -33,7 +33,7 @@ module.exports = function(grunt) {
             tcConfig = grunt.file.readJSON('config.json'),
             tmpDirectory = exporter.tmpDirectory;
 
-        grunt.template.addDelimiters('dumpDelimiters', '{%', '%}');
+        grunt.template.addDelimiters('microDelimiters', '{%', '%}');
 
         grunt.config.merge({
             bump: {
@@ -82,7 +82,7 @@ module.exports = function(grunt) {
                         return filepath;
                     },
                     src: [fixPath(tmpDirectory) + '**'],
-                    dest: fixPath(exporter.dumpDirectory) + grunt.template.process(exporter.dumpName, { data: pkg, delimiters: 'dumpDelimiters' }) + '.zip'
+                    dest: fixPath(exporter.dumpDirectory) + grunt.template.process(exporter.dumpName, { data: pkg, delimiters: 'microDelimiters' }) + '.zip'
                 }
             }
         });
@@ -274,7 +274,7 @@ module.exports = function(grunt) {
                             for(var i = 1; i < match.length; i++) {
                                 matchData['$'+i] = match[i];
                             }
-                            matchDest = grunt.template.process(dest, { data: matchData });
+                            matchDest = grunt.template.process(dest, { data: matchData, delimiters: 'microDelimiters' });
                         } else {
                             matchDest = dest;
                         }
@@ -308,7 +308,7 @@ module.exports = function(grunt) {
         function dumpFiles() {
             switch(exporter.dumpType) {
                 case 'folder':
-                    var dest = fixPath(exporter.dumpDirectory) + grunt.template.process(exporter.dumpName, { data: pkg, delimiters: 'dumpDelimiters' }) + '/';
+                    var dest = fixPath(exporter.dumpDirectory) + grunt.template.process(exporter.dumpName, { data: pkg, delimiters: 'microDelimiters' }) + '/';
 
                     grunt.file.mkdir(dest);
                     grunt.file.recurse(tmpDirectory, function(abspath, rootdir, subdir, filename) {

@@ -106,7 +106,7 @@ Your default paths to images, that shall be optimized by imagemin.
 
 Type: `Object`
 
-You can define mappings for files and folders to restructure the folders inside the dump. Mappings are processed one by another. You can access single globbed placeholders (`*`) and use them inside the destination path via grunt templates. For example: `"/path/to/*/index.html": "/dest/<%= $1 %>/index.html"` will be executed for each matched file.
+You can define mappings for files and folders to restructure the folders inside the dump. Mappings are processed one by another. You can access single globbed placeholders (`*`) and use them inside the destination path via grunt templates. For example: `"/path/to/*/index.html": "/dest/{%= $1 %}/index.html"` will be executed for each matched file.
 
 ### config.replacements
 
