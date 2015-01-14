@@ -28,27 +28,27 @@ In your project's Gruntfile, add a section named `'tc-micro-exporter'` to the da
 
 	grunt.initConfig({
 		'tc-micro-exporter': {
-			config: {
-				dumpDirectory: 'export',
-				dumpType: 'zip',
-				dumpName: '<%= name %>-<%= version %>',
-				tmpDirectory: 'app/cache/grunt-terrific-micro-exporter-dl',
-				exportAssets: true,
-				exportViews: true,
-				additionalFiles: [],
-				imageminPaths: [],
-				mapping: {},
-				replacements: [],
-				bump: {
-					commit: true,
-					files: ['package.json'],
-					push: true,
-					pushTo: 'origin',
-					tag: true
-				}
+			dumpDirectory: 'export',
+			dumpType: 'zip',
+			dumpName: '{%= name %}-{%= version %}',
+			tmpDirectory: 'app/cache/grunt-terrific-micro-exporter-dl',
+			exportAssets: true,
+			exportViews: true,
+			additionalFiles: [],
+			imageminPaths: [],
+			mapping: {},
+			replacements: [],
+			bump: {
+				commit: false,
+				files: ['package.json'],
+				push: false,
+				pushTo: 'origin',
+				tag: false
 			}
 		}
 	});
+
+You will also need a `package.json` file at the root of your project to hold your projects name and version.
 
 ## Options
 
@@ -66,9 +66,9 @@ The type of dump. Can be `'zip'` or `'folder'`.
 
 ### config.dumpName
 
-Type: `String` Default value: `'<%= name %>-<%= version %>'`
+Type: `String` Default value: `'{%= name %}-{%= version %}'`
 
-The name of the dumped zip/folder.
+The name of the dumped zip/folder. Use the custom delimiters to make sure, that your dumps get the correct new version.
 
 ### config.tmpDirectory
 

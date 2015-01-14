@@ -26,12 +26,14 @@ module.exports = function(grunt) {
 
     var DESC = 'Export versionized Terrific Micro packages.';
 
-    grunt.registerMultiTask('tc-micro-exporter', DESC, function(type, incType) {
+    grunt.registerTask('tc-micro-exporter', DESC, function(type, incType) {
 
         var pkg = grunt.file.readJSON('package.json'),
-            exporter = this.data,
+            exporter = grunt.config('tc-micro-exporter'),
             tcConfig = grunt.file.readJSON('config.json'),
             tmpDirectory = exporter.tmpDirectory;
+
+        grunt.template.addDelimiters('dumpDelimiters', '{%', '%}');
 
         grunt.config.merge({
             bump: {
@@ -80,7 +82,7 @@ module.exports = function(grunt) {
                         return filepath;
                     },
                     src: [fixPath(tmpDirectory) + '**'],
-                    dest: fixPath(exporter.dumpDirectory) + grunt.template.process(exporter.dumpName, { data: pkg }) + '.zip'
+                    dest: fixPath(exporter.dumpDirectory) + grunt.template.process(exporter.dumpName, { data: pkg, delimiters: 'dumpDelimiters' }) + '.zip'
                 }
             }
         });
@@ -115,7 +117,7 @@ module.exports = function(grunt) {
 
         switch(type) {
             case 'release':
-                switch(version) {
+                switch(incType) {
                     case 'major':
                         grunt.task.run(['bump-only:major']);
                         break;
@@ -126,7 +128,7 @@ module.exports = function(grunt) {
                         grunt.task.run(['bump-only']);
                         break;
                 }
-                grunt.task.run(['tc-micro-export:dump', 'bump-commit']);
+                grunt.task.run(['tc-micro-exporter:dump', 'bump-commit']);
                 break;
             case 'dump':
             default:
@@ -306,7 +308,7 @@ module.exports = function(grunt) {
         function dumpFiles() {
             switch(exporter.dumpType) {
                 case 'folder':
-                    var dest = fixPath(exporter.dumpDirectory) + grunt.template.process(exporter.dumpName, { data: pkg }) + '/';
+                    var dest = fixPath(exporter.dumpDirectory) + grunt.template.process(exporter.dumpName, { data: pkg, delimiters: 'dumpDelimiters' }) + '/';
 
                     grunt.file.mkdir(dest);
                     grunt.file.recurse(tmpDirectory, function(abspath, rootdir, subdir, filename) {
