@@ -145,7 +145,7 @@ An array containing replace definition objects for Regex and String replacements
 Examples:
 
     replacements: [{
-        files: ['*.html', '*.css'],
+        files: ['*.html', 'app.css'],
         replace: [{
             from: 'foo',
             to: 'bar'
@@ -159,8 +159,8 @@ Will search inside every `.html` file and the `app.css` file for `'foo'` and rep
             files: '*.html',
             replace: [
                 {
-                    from: '"([a-z]*).(css|js)',
-                    to: '"assets/$1.min.$2'
+                    from: '"([a-z]+)\\.(css|js)"',
+                    to: '"assets/$1.min.$2"'
                 }
             ]
         }
@@ -242,8 +242,8 @@ You may use this example configuration to test the export in your Terrific Micro
                                 to: 'components'
                             },
                             {
-                                from: '([a-z]*).(css|js)',
-                                to: 'assets/$1.min.$2'
+                                from: '"([a-z]+)\\.(css|js)"',
+                                to: '"assets/$1.min.$2"'
                             }
                         ]
                     },
