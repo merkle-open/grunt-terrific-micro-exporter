@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Grunt-terrific-micro-exporter by namics</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Grunt-terrific-micro-exporter</h1>
+        <h2>Grunt Exporter for Terrific Micro</h2>
+        <a href="https://github.com/namics/grunt-terrific-micro-exporter" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="grunt-terrific-micro-exporter" class="anchor" href="#grunt-terrific-micro-exporter" aria-hidden="true"><span class="octicon octicon-link"></span></a>Grunt Terrific Micro Exporter</h1>
+
+<p>This tool exports your views and assets into a versioned zip file. It fetches the HTML of your views, your dynamic assets and configurable additional files. You can change the folder structure within the export. Images can be automatically optimized by imagemin. Every release will create a new version (patch, minor oder major) and commit/push it to the project repository. Versions will be bumped automatically.</p>
+
+<h2>
+<a id="table-of-contents" class="anchor" href="#table-of-contents" aria-hidden="true"><span class="octicon octicon-link"></span></a>Table of contents</h2>
+
+<ul>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#configuration">Configuration</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#contributing">Contributing</a></li>
+<li><a href="#credits">Credits &amp; License</a></li>
+</ul>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>This plugin requires Grunt.</p>
+
+<p>If you haven't used <a href="http://gruntjs.com">Grunt</a> before, be sure to check out the <a href="http://gruntjs.com/getting-started">Getting Started</a> guide, as it explains how to create a <a href="http://gruntjs.com/sample-gruntfile">Gruntfile</a> as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:</p>
+
+<pre><code>npm install grunt-terrific-micro-exporter --save-dev
+</code></pre>
+
+<p>Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:</p>
+
+<pre><code>grunt.loadNpmTasks('grunt-terrific-micro-exporter');
+</code></pre>
+
+<h2>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration</h2>
+
+<p>In your project's Gruntfile, add a section named <code>'tc-micro-exporter'</code> to the data object passed into <code>grunt.initConfig()</code>. The options are:</p>
+
+<pre><code>grunt.initConfig({
+    'tc-micro-exporter': {
+        dumpDirectory: 'export',
+        dumpType: 'zip',
+        dumpName: '{%= name %}-{%= version %}',
+        tmpDirectory: 'app/cache/grunt-terrific-micro-exporter-dl',
+        exportAssets: true,
+        exportViews: true,
+        additionalFiles: [],
+        imageminPaths: [],
+        mapping: {},
+        replacements: [],
+        bump: {
+            commit: false,
+            files: ['package.json'],
+            push: false,
+            pushTo: 'origin',
+            tag: false
+        }
+    }
+});
+</code></pre>
+
+<p>You will also need a <code>package.json</code> file at the root of your project to hold your projects name and version.</p>
+
+<h2>
+<a id="options" class="anchor" href="#options" aria-hidden="true"><span class="octicon octicon-link"></span></a>Options</h2>
+
+<h3>
+<a id="dumpdirectory" class="anchor" href="#dumpdirectory" aria-hidden="true"><span class="octicon octicon-link"></span></a>dumpDirectory</h3>
+
+<p>Type: <code>String</code> Default value: <code>'export'</code></p>
+
+<p>The folder name, where the dumped files will be saved.</p>
+
+<h3>
+<a id="dumptype" class="anchor" href="#dumptype" aria-hidden="true"><span class="octicon octicon-link"></span></a>dumpType</h3>
+
+<p>Type: <code>String</code> Default value: <code>'zip'</code></p>
+
+<p>The type of dump. Can be <code>'zip'</code> or <code>'folder'</code>.</p>
+
+<h3>
+<a id="dumpname" class="anchor" href="#dumpname" aria-hidden="true"><span class="octicon octicon-link"></span></a>dumpName</h3>
+
+<p>Type: <code>String</code> Default value: <code>'{%= name %}-{%= version %}'</code></p>
+
+<p>The name of the dumped zip/folder. Use the custom delimiters to make sure, that your dumps get the correct new version.</p>
+
+<h3>
+<a id="tmpdirectory" class="anchor" href="#tmpdirectory" aria-hidden="true"><span class="octicon octicon-link"></span></a>tmpDirectory</h3>
+
+<p>Type: <code>String</code> Default value: <code>'app/cache/grunt-terrific-micro-export-dl'</code></p>
+
+<p>The path to the temporary download folder. This will be deleted after task execution.</p>
+
+<h3>
+<a id="exportassets" class="anchor" href="#exportassets" aria-hidden="true"><span class="octicon octicon-link"></span></a>exportAssets</h3>
+
+<p>Type: <code>Boolean</code>|<code>Array</code> Default value: <code>true</code></p>
+
+<p>Defines if you want to export Terrific Micro assets (defined at <code>config.json</code>).
+Use an array of strings, to export only selected assets.</p>
+
+<p>Examples:</p>
+
+<pre><code>[true]                   // exports all assets
+['app.css']              // exports only `app.css`
+</code></pre>
+
+<h3>
+<a id="exportviews" class="anchor" href="#exportviews" aria-hidden="true"><span class="octicon octicon-link"></span></a>exportViews</h3>
+
+<p>Type: <code>Boolean</code>|<code>Array</code> Default value: <code>true</code></p>
+
+<p>Defines if you want to export Terrific Micro views.
+Use an array of strings, to export only selected views. (without file extensions)</p>
+
+<p>Examples:</p>
+
+<pre><code>[false]                  // does not export views
+['index','content']      // exports only `index` and `content` view
+</code></pre>
+
+<h3>
+<a id="additionalfiles" class="anchor" href="#additionalfiles" aria-hidden="true"><span class="octicon octicon-link"></span></a>additionalFiles</h3>
+
+<p>Type: <code>Array</code></p>
+
+<p>An array containing glob patterns for additional files, that should be added to the dumped files.</p>
+
+<p>Example:</p>
+
+<pre><code>['assets/img/**','assets/fonts/**','components/modules/*/img/*']
+</code></pre>
+
+<h3>
+<a id="imageminpaths" class="anchor" href="#imageminpaths" aria-hidden="true"><span class="octicon octicon-link"></span></a>imageminPaths</h3>
+
+<p>Type: <code>Array</code></p>
+
+<p>Your default paths to images, that shall be optimized by imagemin. You can use glob patterns for wildcard directory selection.</p>
+
+<p>Example:</p>
+
+<pre><code>['assets/img','components/modules/*/img']
+</code></pre>
+
+<h3>
+<a id="mapping" class="anchor" href="#mapping" aria-hidden="true"><span class="octicon octicon-link"></span></a>mapping</h3>
+
+<p>Type: <code>Object</code></p>
+
+<p>You can define mappings for files and folders to restructure the folders inside the dump. Mappings are processed one by another.
+You can access single globbed placeholders (<code>*</code>) and use them inside the destination path via grunt templates.
+For example: <code>'/path/to/*/index.html': '/dest/{%= $1 %}/index.html'</code> will be executed for each matched file.</p>
+
+<p>Example:</p>
+
+<pre><code>{
+    'components/modules': 'components',
+    'app.css': 'assets/app.min.css',
+    '*.js': 'assets/{%= $1 %}.min.js'
+}
+</code></pre>
+
+<h3>
+<a id="replacements" class="anchor" href="#replacements" aria-hidden="true"><span class="octicon octicon-link"></span></a>replacements</h3>
+
+<p>Type: <code>Array</code></p>
+
+<p>An array containing replace definition objects for Regex and String replacements inside the specified files.</p>
+
+<p>Examples:</p>
+
+<pre><code>replacements: [{
+    files: ['*.html', 'app.css'],
+    replace: [{
+        from: 'foo',
+        to: 'bar'
+    }]
+}]
+</code></pre>
+
+<p>Will search inside every <code>.html</code> file and the <code>app.css</code> file for <code>'foo'</code> and replaces all its occurences with <code>'bar'</code>.</p>
+
+<pre><code>replacements: [
+    {
+        files: '*.html',
+        replace: [
+            {
+                from: '"([a-z]+)\\.(css|js)"',
+                to: '"assets/$1.min.$2"'
+            }
+        ]
+    }
+]
+</code></pre>
+
+<p>Will search inside every <code>.html</code> file for css &amp; js file pathes and prefixes them with <code>assets/</code> and adds <code>.min</code> before the extension</p>
+
+<h3>
+<a id="bump" class="anchor" href="#bump" aria-hidden="true"><span class="octicon octicon-link"></span></a>bump</h3>
+
+<p>Type: <code>Object</code></p>
+
+<p>Here you can define the keys <code>commit</code>, <code>files</code>, <code>push</code>, <code>pushTo</code> and <code>tag</code> for <a href="https://github.com/vojtajina/grunt-bump">grunt-bump</a>.</p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Here are some examples for your every day usage:</p>
+
+<pre><code># Create a dump based on the current version (no version change)
+# Beware: an existing dump with this version will be overwritten!
+grunt tc-micro-exporter:dump
+
+# Release a patch version (0.0.1 -&gt; 0.0.2)
+grunt tc-micro-exporter:release
+
+# Release a minor version (0.0.2 -&gt; 0.1.0)
+grunt tc-micro-exporter:release:minor
+
+# Release a major version (0.1.0 -&gt; 1.0.0)
+grunt tc-micro-exporter:release:major
+
+# Release a specific version 2.0.1
+grunt tc-micro-exporter:release --setversion=2.0.1
+
+# Don't minify CSS and JS for patch release
+grunt tc-micro-exporter:release --dev
+
+# Don't minify CSS and JS for minor release
+grunt tc-micro-exporter:release:minor --dev
+</code></pre>
+
+<p>Use one of these and you will find a dump with the new version in your configured <code>dumpDirectory</code>. Per default a release commit and tag is pushed to your project repository (unless you're not using git).</p>
+
+<p>When using <code>grunt tc-micro-exporter:dump</code> you may change the version first to prevent file overwriting (manually or by running <code>grunt bump-only</code> or <code>grunt bump-only:prerelease</code>).</p>
+
+<h3>
+<a id="try-out" class="anchor" href="#try-out" aria-hidden="true"><span class="octicon octicon-link"></span></a>Try Out</h3>
+
+<p>You may use this example configuration to test the export in your Terrific Micro Frontend. The Git tasks (grunt-bump) are disabled.</p>
+
+<pre><code>'use strict';
+module.exports = function(grunt) {
+
+    grunt.initConfig({
+        'tc-micro-exporter': {
+            dumpDirectory:   'export',
+            dumpType:        'folder',
+            dumpName:        '{%= name %}-{%= version %}',
+            tmpDirectory:    'app/cache/grunt-terrific-micro-exporter-dl',
+            exportAssets:    true,
+            exportViews:     true,
+            additionalFiles: ['assets/img/**','assets/fonts/**', 'components/modules/*/img/*'],
+            imageminPaths:   ['assets/img','components/modules/*/img'],
+            mapping:         {
+                'assets/img': 'assets/images',
+                'components/modules': 'components',
+                '*.css': 'assets/{%= $1 %}.min.css',
+                '*.js': 'assets/{%= $1 %}.min.js'
+            },
+            replacements:    [
+                {
+                    files: [
+                        '*.html'
+                    ],
+                    replace: [
+                        {
+                            from: 'assets/img',
+                            to: 'assets/images'
+                        },
+                        {
+                            from: 'components/modules',
+                            to: 'components'
+                        },
+                        {
+                            from: '"([a-z]+)\\.(css|js)"',
+                            to: '"assets/$1.min.$2"'
+                        }
+                    ]
+                },
+                {
+                    files: [
+                        '*.css'
+                    ],
+                    replace: [
+                        {
+                            from: 'assets/img',
+                            to: 'images'
+                        },
+                        {
+                            from: 'assets/',
+                            to: ''
+                        },
+                        {
+                            from: 'components/modules',
+                            to: 'components'
+                        }
+                    ]
+                }
+            ],
+            bump:            {
+                commit: false,
+                files:  ['package.json'],
+                push:   false,
+                pushTo: 'origin',
+                tag:    false
+            }
+        }
+    });
+
+    grunt.loadNpmTasks('grunt-terrific-micro-exporter');
+
+};
+</code></pre>
+
+<h2>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributing</h2>
+
+<ul>
+<li>For Bugs &amp; Features please use <a href="https://github.com/namics/grunt-terrific-micro-exporter/issues">github</a>
+</li>
+<li>Feel free to fork and send PRs. That's the best way to discuss your ideas.</li>
+</ul>
+
+<h2>
+<a id="credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits</h2>
+
+<p>Grunt Terrific Micro Exporter was created by <a href="https://github.com/Regaddi">Christian Stuff</a></p>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>Released under the <a href="LICENSE">MIT license</a></p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/namics/grunt-terrific-micro-exporter/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/namics/grunt-terrific-micro-exporter/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/namics/grunt-terrific-micro-exporter"></a> is maintained by <a href="https://github.com/namics">namics</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
