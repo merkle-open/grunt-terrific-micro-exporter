@@ -1,5 +1,9 @@
 # Changelog - Terrific Micro Exporter
 
+## v0.0.11 - 2015-02-24
+
+- bump is now optional and can be disabled completely by providing `bump: false`
+
 ## v0.0.10 - 2015-01-14
 
 - imageminPaths now supports glob patterns

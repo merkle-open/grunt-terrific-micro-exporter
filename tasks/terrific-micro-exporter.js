@@ -35,22 +35,27 @@ module.exports = function(grunt) {
 
         grunt.template.addDelimiters('microDelimiters', '{%', '%}');
 
-        grunt.config.merge({
-            bump: {
-                options: {
-                    files: exporter.bump.files || [],
-                    updateConfigs: [],
-                    commit: exporter.bump.commit || false,
-                    commitMessage: 'Release %VERSION%',
-                    commitFiles: exporter.bump.files || [],
-                    createTag: exporter.bump.tag || false,
-                    tagName: 'v%VERSION%',
-                    tagMessage: 'Version %VERSION%',
-                    push: exporter.bump.push || false,
-                    pushTo: exporter.bump.pushTo || 'origin',
-                    gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d'
+        if('object' === typeof exporter.bump) {
+            grunt.config.merge({
+                bump: {
+                    options: {
+                        files: exporter.bump.files || [],
+                        updateConfigs: [],
+                        commit: exporter.bump.commit || false,
+                        commitMessage: 'Release %VERSION%',
+                        commitFiles: exporter.bump.files || [],
+                        createTag: exporter.bump.tag || false,
+                        tagName: 'v%VERSION%',
+                        tagMessage: 'Version %VERSION%',
+                        push: exporter.bump.push || false,
+                        pushTo: exporter.bump.pushTo || 'origin',
+                        gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d'
+                    }
                 }
-            },
+            });
+        }
+
+        grunt.config.merge({
             exec: {
                 configAssets: {
                     cmd: function(asset) {
