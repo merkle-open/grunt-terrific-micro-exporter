@@ -1,5 +1,9 @@
 # Changelog - Terrific Micro Exporter
 
+## v0.0.12 - 2015-09-22
+
+- fixed an issue with imagemin, where original images where optimized, not the exported ones
+
 ## v0.0.11 - 2015-02-24
 
 - bump is now optional and can be disabled completely by providing `bump: false`
