@@ -103,11 +103,13 @@ module.exports = function(grunt) {
             if(imagePaths && imagePaths.length) {
                 imagePaths.forEach(function(path) {
                     grunt.file.expand(path).forEach(function(file) {
+                        var tmpImgFile = fixPath(tmpDirectory) + file;
+
                         configs.push({
                             expand: true,
-                            cwd: fixPath(file),
+                            cwd: tmpImgFile,
                             src: ['*.{png,jpg,gif,svg}', '**/*.{png,jpg,gif,svg}'],
-                            dest: fixPath(tmpDirectory) + file
+                            dest: tmpImgFile
                         });
                     });
                 });
