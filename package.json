@@ -1,39 +1,41 @@
 {
-	"name": "grunt-terrific-micro-exporter",
-	"version": "0.0.12",
-	"description": "An easy-to-use export module for Terrific Micro based on Grunt.js",
-	"author": "Christian Stuff <christian.stuff@namics.com>",
-	"contributors": [{
-		"name": "Ernst Ammann",
-		"email": "ernst.ammann@namics.com"
-	}],
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/namics/grunt-terrific-micro-exporter"
-	},
-	"bugs": {
-	  "url": "https://github.com/namics/grunt-terrific-micro-exporter/issues"
-	},
-	"keywords": [
-		"terrific",
-		"micro",
-		"exporter",
-		"grunt"
-	],
-	"devDependencies": {
-		"grunt": "~0.4.5"
-	},
-	"peerDependencies": {
-		"grunt": "~0.4.5"
-	},
-	"dependencies": {
-		"grunt-cli": "~0.1.13",
-		"grunt-bump": "~0.7.0",
-		"grunt-contrib-imagemin": "~0.8.1",
-		"grunt-exec": "~0.4.6",
-		"grunt-zip": "~0.16.0",
-		"touch": "~0.0.3",
-		"runonymous-grunt": "~0.0.1"
-	},
-	"license": "MIT"
+  "name": "grunt-terrific-micro-exporter",
+  "version": "0.0.13",
+  "description": "An easy-to-use export module for Terrific Micro based on Grunt.js",
+  "author": "Christian Stuff <christian.stuff@namics.com>",
+  "contributors": [
+    {
+      "name": "Ernst Ammann",
+      "email": "ernst.ammann@namics.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/namics/grunt-terrific-micro-exporter"
+  },
+  "bugs": {
+    "url": "https://github.com/namics/grunt-terrific-micro-exporter/issues"
+  },
+  "keywords": [
+    "terrific",
+    "micro",
+    "exporter",
+    "grunt"
+  ],
+  "devDependencies": {
+    "grunt": "~0.4.5"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.5"
+  },
+  "dependencies": {
+    "grunt-cli": "~0.1.13",
+    "grunt-bump": "~0.7.0",
+    "grunt-contrib-imagemin": "~0.8.1",
+    "grunt-exec": "~0.4.6",
+    "grunt-zip": "~0.16.0",
+    "touch": "~0.0.3",
+    "runonymous-grunt": "~0.0.1"
+  },
+  "license": "MIT"
 }
