@@ -27,13 +27,13 @@
 		"grunt": "~0.4.5"
 	},
 	"dependencies": {
-		"grunt-cli": ">=0.1.13",
-		"grunt-bump": ">=0.0.15",
-		"grunt-contrib-imagemin": ">=0.8.1",
-		"grunt-exec": ">=0.4.6",
-		"grunt-zip": ">=0.16.0",
-		"touch": ">=0.0.3",
-		"runonymous-grunt": ">=0.0.1"
+		"grunt-cli": "~0.1.13",
+		"grunt-bump": "~0.7.0",
+		"grunt-contrib-imagemin": "~0.8.1",
+		"grunt-exec": "~0.4.6",
+		"grunt-zip": "~0.16.0",
+		"touch": "~0.0.3",
+		"runonymous-grunt": "~0.0.1"
 	},
 	"license": "MIT"
 }
