@@ -65,7 +65,7 @@ module.exports = function(grunt) {
 
                         touch(file);
 
-                        return 'php app/bin/micro ' + fileParts[1] + ':' + fileParts[0] + (dev ? '' : ' min') + ' > ' + file;
+                        return 'php app/bin/micro ' + fileParts.pop()+ ':' + fileParts.join('.') + (dev ? '' : ' min') + ' > ' + file;
                     }
                 },
                 configViews: {
