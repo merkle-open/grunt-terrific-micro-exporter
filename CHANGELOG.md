@@ -1,5 +1,9 @@
 # Changelog - Terrific Micro Exporter
 
+## v0.0.15 - 2017-01-11
+
+- fixed resolving of node_modules
+
 ## v0.0.12 - 2015-09-22
 
 - fixed an issue with imagemin, where original images where optimized, not the exported ones
