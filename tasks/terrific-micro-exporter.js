@@ -14,15 +14,14 @@
 module.exports = function(grunt) {
 
     var path = require('path');
-    var pluginPath = path.relative(path.resolve('node_modules'), __dirname + '/../');
     var touch = require('touch');
 
     require('runonymous-grunt')(grunt);
 
-    grunt.loadNpmTasks(pluginPath + '/node_modules/grunt-bump');
-    grunt.loadNpmTasks(pluginPath + '/node_modules/grunt-contrib-imagemin');
-    grunt.loadNpmTasks(pluginPath + '/node_modules/grunt-exec');
-    grunt.loadNpmTasks(pluginPath + '/node_modules/grunt-zip');
+    grunt.loadNpmTasks('grunt-bump');
+    grunt.loadNpmTasks('grunt-contrib-imagemin');
+    grunt.loadNpmTasks('grunt-exec');
+    grunt.loadNpmTasks('grunt-zip');
 
     var DESC = 'Export versionized Terrific Micro packages.';
 
